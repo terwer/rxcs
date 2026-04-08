@@ -1,3 +1,5 @@
-const autojsUtils = require('./modules/autojs-utils');
+const instanceGuard = require('./modules/instance-guard');
+const rxcs = require('./modules/rxcs');
 
-autojsUtils.test();
+instanceGuard.checkDuplicate(true, true);
+rxcs.run(true);
