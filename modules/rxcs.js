@@ -2,6 +2,7 @@ const config = require("./rxcs-config");
 const logUtils = require("./log-utils");
 const delayUtils = require("./delay-utils");
 const actionUtils = require("./action-utils");
+const login = require("./rxcs-login");
 
 function selectorByClassAndText(classNameValue, textValue, timeoutMs) {
     return className(classNameValue).text(textValue).findOne(timeoutMs || 200);
@@ -16,12 +17,16 @@ module.exports = {
         this.ensureCapturePermission();
 
         this.launchApp();
-        this.handlePrivacyDialog();
-        if (this.handlePermissionDialog()) {
-            logUtils.info("permission handled, relaunch app");
-            this.launchApp();
+        // 临时注释方便测试，全流程通了打开
+        // this.handlePrivacyDialog();
+        // if (this.handlePermissionDialog()) {
+        //     logUtils.info("permission handled, relaunch app");
+        //     this.launchApp();
+        // }
+        // this.handleNewVersionTip();
+        if (config.login.enabled) {
+            login.run();
         }
-        this.handleNewVersionTip();
 
         logUtils.info("RXCS flow end", true);
     },

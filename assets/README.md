@@ -8,6 +8,8 @@
 当前还需要你补：
 
 - `new_version_confirm.png`
+- `agree_no.png`
+- `agree_yes.png`
 
 ## 截图规则
 
@@ -31,6 +33,34 @@
 2. 只裁“确定”按钮本体
 3. 保存到：
    `C:\Users\Administrator\Documents\myscripts\rxcs\assets\new_version_confirm.png`
+
+### agree_no.png
+
+用途：
+
+- 登录页协议未勾选状态
+
+截图方法：
+
+1. 页面停在登录页
+2. 只裁左下角协议圆点未勾选本体
+3. 不要带后面文字
+4. 保存到：
+   `C:\Users\Administrator\Documents\myscripts\rxcs\assets\agree_no.png`
+
+### agree_yes.png
+
+用途：
+
+- 登录页协议已勾选状态
+
+截图方法：
+
+1. 页面停在登录页
+2. 只裁左下角协议圆点已勾选本体
+3. 不要带后面文字
+4. 保存到：
+   `C:\Users\Administrator\Documents\myscripts\rxcs\assets\agree_yes.png`
 
 ## 后续可能会继续要的资源
 

@@ -5,6 +5,8 @@ module.exports = {
         newVersionTip: "./assets/new_version_tip.png",
         newVersionConfirm: "./assets/new_version_confirm.png",
         loginButton: "./assets/login_btn.png",
+        agreeNo: "./assets/agree_no.png",
+        agreeYes: "./assets/agree_yes.png",
     },
     permissionTexts: [
         "允许",
@@ -13,6 +15,27 @@ module.exports = {
         "继续允许",
     ],
     versionTipThreshold: 0.8,
+    login: {
+        enabled: true,
+        mode: "login_click_only",
+        account: "terwer",
+        password: "123",
+        ids: {
+            userInput: "huanyu_defaultlogin_et_user",
+            pwdInput: "huanyu_defaultlogin_et_pwd",
+            loginButton: "huanyu_defaultlogin_bt_login",
+        },
+        placeholders: {
+            user: "请输入用户名",
+            pwd: "请输入密码",
+        },
+        timeouts: {
+            pageReady: 5000,
+            node: 1200,
+            afterInput: 1000,
+            afterClick: 800,
+        },
+    },
     debug: {
         screenshotEnabled: true,
     },
