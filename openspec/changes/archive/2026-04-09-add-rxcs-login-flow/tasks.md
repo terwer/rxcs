@@ -26,7 +26,7 @@
 
 - [x] 5.1 将用户名输入、密码输入、协议处理、登录按钮组合为完整登录流程
 - [x] 5.2 为登录模块提供 `login_page_ready`、`login_input_user_only`、`login_input_pwd_only`、`login_agree_only`、`login_click_only`、`login_full` 调试模式
-- [ ] 5.3 确保完整登录流程仅在各单项测试通过后启用
+- [x] 5.3 确保完整登录流程仅在各单项测试通过后启用
 
 ## 6. 资源与文档
 
