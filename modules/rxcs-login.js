@@ -180,13 +180,16 @@ module.exports = {
             return true;
         }
 
-        if (after.pwdText === before.pwdText || after.pwdText === placeholder) {
-            logUtils.warn("pwd: target unchanged");
-            return false;
-        }
         if (after.userText !== before.userText) {
             logUtils.warn("pwd: other field polluted");
             return false;
+        }
+        if (after.pwdText === placeholder) {
+            logUtils.warn("pwd: placeholder still visible");
+            return false;
+        }
+        if (after.pwdText === before.pwdText) {
+            logUtils.info("pwd: text unchanged by readback, treat as success because password field masks content");
         }
         return true;
     },

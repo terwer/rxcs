@@ -17,7 +17,7 @@ module.exports = {
     versionTipThreshold: 0.8,
     login: {
         enabled: true,
-        mode: "login_click_only",
+        mode: "login_full",
         account: "terwer",
         password: "123",
         ids: {
