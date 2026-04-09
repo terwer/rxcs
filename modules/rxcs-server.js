@@ -285,6 +285,14 @@ module.exports = {
     },
 
     testClickGreenEntryOnly() {
+        const stage = this.waitForAnyServerStage();
+        if (stage === "unknown") {
+            return false;
+        }
+        if (stage !== "green_entry") {
+            logUtils.warn(`server_click_green_entry_only skipped: current stage is ${stage}`);
+            return false;
+        }
         if (!this.isPageReady()) {
             return false;
         }
@@ -292,6 +300,14 @@ module.exports = {
     },
 
     testClickServerSelectOnly() {
+        const stage = this.waitForAnyServerStage();
+        if (stage === "unknown") {
+            return false;
+        }
+        if (stage !== "server_select") {
+            logUtils.warn(`server_click_server_select_only skipped: current stage is ${stage}`);
+            return false;
+        }
         if (!this.isServerSelectPageReady()) {
             return false;
         }
@@ -299,6 +315,14 @@ module.exports = {
     },
 
     testClickGroup1To10Only() {
+        const stage = this.waitForAnyServerStage();
+        if (stage === "unknown") {
+            return false;
+        }
+        if (stage !== "group") {
+            logUtils.warn(`server_click_group_1_10_only skipped: current stage is ${stage}`);
+            return false;
+        }
         if (!this.isGroupPageReady()) {
             return false;
         }
@@ -306,6 +330,14 @@ module.exports = {
     },
 
     testClickHuai1Only() {
+        const stage = this.waitForAnyServerStage();
+        if (stage === "unknown") {
+            return false;
+        }
+        if (stage !== "zone") {
+            logUtils.warn(`server_click_huai_1_only skipped: current stage is ${stage}`);
+            return false;
+        }
         if (!this.isZonePageReady()) {
             return false;
         }

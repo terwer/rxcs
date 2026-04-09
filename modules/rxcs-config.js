@@ -38,7 +38,7 @@ module.exports = {
     },
     server: {
         enabled: true,
-        mode: "server_click_green_entry_only",
+        mode: "server_click_group_1_10_only",
         targetLabel: "怀旧1区",
         assets: {
             greenEntryPageReady: "./assets/server_green_entry_page_ready.png",
@@ -54,7 +54,7 @@ module.exports = {
         },
         threshold: 0.8,
         timeouts: {
-            pageReady: 5000,
+            pageReady: 12000,
             afterClick: 1000,
             result: 5000,
         },
