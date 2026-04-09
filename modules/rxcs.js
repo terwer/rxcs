@@ -3,6 +3,7 @@ const logUtils = require("./log-utils");
 const delayUtils = require("./delay-utils");
 const actionUtils = require("./action-utils");
 const login = require("./rxcs-login");
+const server = require("./rxcs-server");
 
 function selectorByClassAndText(classNameValue, textValue, timeoutMs) {
     return className(classNameValue).text(textValue).findOne(timeoutMs || 200);
@@ -24,8 +25,12 @@ module.exports = {
         //     this.launchApp();
         // }
         // this.handleNewVersionTip();
+        let loginOk = true;
         if (config.login.enabled) {
-            login.run();
+            loginOk = login.run();
+        }
+        if (loginOk && config.server.enabled) {
+            server.run();
         }
 
         logUtils.info("RXCS flow end", true);

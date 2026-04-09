@@ -16,7 +16,7 @@ module.exports = {
     ],
     versionTipThreshold: 0.8,
     login: {
-        enabled: true,
+        enabled: false,
         mode: "login_full",
         account: "we7070015",
         password: "756458",
@@ -34,6 +34,29 @@ module.exports = {
             node: 1200,
             afterInput: 1000,
             afterClick: 800,
+        },
+    },
+    server: {
+        enabled: true,
+        mode: "server_full",
+        targetLabel: "怀旧1区",
+        assets: {
+            greenEntryPageReady: "./assets/server_green_entry_page_ready.png",
+            greenEntry: "./assets/server_green_entry.png",
+            serverSelectPageReady: "./assets/server_server_select_page_ready.png",
+            currentHuai1: "./assets/server_current_huai_1.png",
+            serverSelectEntry: "./assets/server_server_select_entry.png",
+            group1To10: "./assets/server_group_1_10.png",
+            zoneHuai1: "./assets/server_zone_huai_1.png",
+            zoneHuai1Selected: "./assets/server_zone_huai_1_selected.png",
+            enterGame: "./assets/server_enter_game.png",
+            serverResult: "./assets/server_result_ready.png",
+        },
+        threshold: 0.8,
+        timeouts: {
+            pageReady: 5000,
+            afterClick: 1000,
+            result: 5000,
         },
     },
     debug: {
