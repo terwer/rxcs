@@ -18,8 +18,8 @@ module.exports = {
     login: {
         enabled: true,
         mode: "login_full",
-        account: "terwer",
-        password: "123",
+        account: "we7070015",
+        password: "756458",
         ids: {
             userInput: "huanyu_defaultlogin_et_user",
             pwdInput: "huanyu_defaultlogin_et_pwd",
