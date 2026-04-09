@@ -38,7 +38,7 @@ module.exports = {
     },
     server: {
         enabled: true,
-        mode: "server_full",
+        mode: "server_click_green_entry_only",
         targetLabel: "怀旧1区",
         assets: {
             greenEntryPageReady: "./assets/server_green_entry_page_ready.png",

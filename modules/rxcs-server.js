@@ -44,24 +44,20 @@ module.exports = {
     },
 
     isPageReady() {
-        if (!assetExists(config.server.assets.greenEntryPageReady)) {
-            logUtils.warn("server green entry page ready asset missing");
-            return false;
-        }
         const ready = delayUtils.waitFor(() => {
-            return imageExists(config.server.assets.greenEntryPageReady);
+            return (assetExists(config.server.assets.greenEntryPageReady) && imageExists(config.server.assets.greenEntryPageReady)) ||
+                (assetExists(config.server.assets.greenEntry) && imageExists(config.server.assets.greenEntry));
         }, config.server.timeouts.pageReady, 300);
         logUtils.info(`server page ready: ${ready}`);
         return ready;
     },
 
     isServerSelectPageReady() {
-        if (!assetExists(config.server.assets.serverSelectPageReady)) {
-            logUtils.warn("server select page ready asset missing");
-            return false;
-        }
         const ready = delayUtils.waitFor(() => {
-            return imageExists(config.server.assets.serverSelectPageReady);
+            return (assetExists(config.server.assets.serverSelectPageReady) && imageExists(config.server.assets.serverSelectPageReady)) ||
+                (assetExists(config.server.assets.serverSelectEntry) && imageExists(config.server.assets.serverSelectEntry)) ||
+                (assetExists(config.server.assets.currentHuai1) && imageExists(config.server.assets.currentHuai1)) ||
+                (assetExists(config.server.assets.enterGame) && imageExists(config.server.assets.enterGame));
         }, config.server.timeouts.pageReady, 300);
         logUtils.info(`server select page ready: ${ready}`);
         return ready;
@@ -89,6 +85,49 @@ module.exports = {
         }, config.server.timeouts.pageReady, 300);
         logUtils.info(`server zone page ready: ${ready}`);
         return ready;
+    },
+
+    detectCurrentStage() {
+        if (assetExists(config.server.assets.serverResult) && imageExists(config.server.assets.serverResult)) {
+            return "result";
+        }
+        if (assetExists(config.server.assets.zoneHuai1Selected) && imageExists(config.server.assets.zoneHuai1Selected)) {
+            return "selected";
+        }
+        if (assetExists(config.server.assets.zoneHuai1) && imageExists(config.server.assets.zoneHuai1)) {
+            return "zone";
+        }
+        if (assetExists(config.server.assets.group1To10) && imageExists(config.server.assets.group1To10)) {
+            return "group";
+        }
+        if ((assetExists(config.server.assets.serverSelectPageReady) && imageExists(config.server.assets.serverSelectPageReady)) ||
+            (assetExists(config.server.assets.serverSelectEntry) && imageExists(config.server.assets.serverSelectEntry)) ||
+            (assetExists(config.server.assets.currentHuai1) && imageExists(config.server.assets.currentHuai1)) ||
+            (assetExists(config.server.assets.enterGame) && imageExists(config.server.assets.enterGame))) {
+            return "server_select";
+        }
+        if ((assetExists(config.server.assets.greenEntryPageReady) && imageExists(config.server.assets.greenEntryPageReady)) ||
+            (assetExists(config.server.assets.greenEntry) && imageExists(config.server.assets.greenEntry))) {
+            return "green_entry";
+        }
+        return "unknown";
+    },
+
+    waitForAnyServerStage() {
+        const timeout = Math.max(config.server.timeouts.pageReady, 15000);
+        let stage = "unknown";
+        const ok = delayUtils.waitFor(() => {
+            stage = this.detectCurrentStage();
+            return stage !== "unknown";
+        }, timeout, 500);
+
+        if (!ok) {
+            logUtils.warn("server stage wait timeout");
+            return "unknown";
+        }
+
+        logUtils.info(`server current stage: ${stage}`);
+        return stage;
     },
 
     clickGreenEntry() {
@@ -180,54 +219,65 @@ module.exports = {
     },
 
     runFull() {
-        if (!this.isPageReady()) {
-            logUtils.error("server page not ready");
-            return false;
-        }
-        if (!this.clickGreenEntry()) {
-            logUtils.error("server green entry failed");
-            return false;
-        }
-        if (!this.isServerSelectPageReady()) {
-            logUtils.error("server select page not ready");
+        let stage = this.waitForAnyServerStage();
+        if (stage === "unknown") {
+            logUtils.error("server stage not ready");
             return false;
         }
 
-        if (!this.isCurrentTargetZone()) {
-            if (!this.clickServerSelectEntry()) {
-                logUtils.error("server select entry failed");
+        if (stage === "green_entry") {
+            if (!this.clickGreenEntry()) {
+                logUtils.error("server green entry failed");
                 return false;
             }
-            if (!this.isGroupPageReady()) {
-                logUtils.error("server group page not ready");
-                return false;
+            stage = this.waitForAnyServerStage();
+        }
+
+        if (stage === "server_select") {
+            if (this.isCurrentTargetZone()) {
+                logUtils.info("server target already selected, skip manual server selection");
+            } else {
+                if (!this.clickServerSelectEntry()) {
+                    logUtils.error("server select entry failed");
+                    return false;
+                }
+                stage = this.waitForAnyServerStage();
             }
+        }
+
+        if (stage === "group") {
             if (!this.clickGroup1To10()) {
                 logUtils.error("server group 1-10 failed");
                 return false;
             }
-            if (!this.isZonePageReady()) {
-                logUtils.error("server zone page not ready");
-                return false;
-            }
+            stage = this.waitForAnyServerStage();
+        }
+
+        if (stage === "zone") {
             if (!this.clickHuai1()) {
                 logUtils.error("server huai 1 failed");
                 return false;
             }
-        } else {
-            logUtils.info("server target already selected, skip server selection");
+            stage = this.waitForAnyServerStage();
         }
 
-        if (!this.clickEnterGame()) {
-            logUtils.error("server enter game failed");
-            return false;
+        if (stage === "selected" || stage === "server_select" || stage === "zone" || stage === "result") {
+            if (stage !== "result") {
+                if (!this.clickEnterGame()) {
+                    logUtils.error("server enter game failed");
+                    return false;
+                }
+            }
+            if (!this.verifySelectionResult()) {
+                logUtils.error("server result verify failed");
+                return false;
+            }
+            logUtils.info("server full success", true);
+            return true;
         }
-        if (!this.verifySelectionResult()) {
-            logUtils.error("server result verify failed");
-            return false;
-        }
-        logUtils.info("server full success", true);
-        return true;
+
+        logUtils.error(`server unsupported stage: ${stage}`);
+        return false;
     },
 
     testPageReady() {
